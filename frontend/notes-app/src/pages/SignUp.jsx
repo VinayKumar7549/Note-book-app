@@ -38,8 +38,8 @@ const SignUp = () => {
   return <>
     <Navbar />
 
-    <div className='flex items-center justify-center mt-8'>
-      <div className='border rounded px-7 py-10 bg-white'>
+    <div className='flex items-center justify-center mt-28'>
+      <div className='w-96 border rounded px-7 py-10 bg-white'>
         <form onSubmit={handleSignUp}>
           <h4 className='text-xl mb-7'>SignUp</h4>
 

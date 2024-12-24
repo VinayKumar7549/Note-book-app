@@ -33,7 +33,7 @@ const Login = () => {
   return <>
     <Navbar/>
 
-    <div className='flex items-center justify-center mt-8'>
+    <div className='flex items-center justify-center mt-28'>
       <div className='border rounded px-7 py-10 bg-white'>
         <form onSubmit={handleLogin}>
           <h4 className='text-xl mb-7'>Login</h4>
