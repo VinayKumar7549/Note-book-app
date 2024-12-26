@@ -64,7 +64,7 @@ app.post("/createAccount", async (req, res) => {
     await user.save();
 
     const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "36000m",
     });
 
     return res.json({
@@ -97,7 +97,7 @@ app.post("/login", async (req, res) => {
     if (userInfo.email == email && userInfo.password == password) {
         const user = { user: userInfo };
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "1h",
+            expiresIn: "36000m",
         });
 
         return res.json({
@@ -115,7 +115,7 @@ app.post("/login", async (req, res) => {
 
 //Add Note
 app.post("/add-note", authenticaionToken, async (req, res) => {
-    const { title, content, tag } = req.body;
+    const { title, content, tags } = req.body;
     const { user } = req.user; // Ensure `authenticaionToken` sets `req.user`
 
     // Validate title and content
@@ -132,7 +132,7 @@ app.post("/add-note", authenticaionToken, async (req, res) => {
         const note = new Note({
             title,
             content,
-            tags: tag || [], // Use an empty array if tag is undefined
+            tags: tags || [], // Use an empty array if tag is undefined
             userId: user._id, // Ensure `user._id` exists
         });
 
