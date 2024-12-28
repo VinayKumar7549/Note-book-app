@@ -13,7 +13,7 @@ const cors = require("cors")
 const app = express();
 
 const jwt = require('jsonwebtoken');
-const { authenticaionToken } = require("./utilities");
+const { authenticateToken } = require("./utilities");
 
 app.use(express.json());
 
@@ -114,7 +114,7 @@ app.post("/login", async (req, res) => {
 })
 
 //Add Note
-app.post("/add-note", authenticaionToken, async (req, res) => {
+app.post("/add-note", authenticateToken, async (req, res) => {
     const { title, content, tags } = req.body;
     const { user } = req.user; // Ensure `authenticaionToken` sets `req.user`
 
@@ -148,6 +148,42 @@ app.post("/add-note", authenticaionToken, async (req, res) => {
             error: true,
             message: "Internal Server Error",
         });
+    }
+});
+
+//Edit Note
+app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
+    const { noteId } = req.params; // Correct destructuring
+    const { title, content, tags, isPinned } = req.body;
+    const { user } = req.user;
+
+    if (!title && !content && !tags && typeof isPinned === "undefined") {
+        return res.status(400).json({ error: true, message: "No changes provided" });
+    }
+
+    try {
+        const note = await Note.findOne({ _id: noteId, userId: user._id });
+
+        if (!note) {
+            return res.status(404).json({ error: true, message: "Note not found" });
+        }
+
+        if (title) note.title = title;
+        if (content) note.content = content;
+        if (tags) note.tags = tags;
+        if (typeof isPinned !== "undefined") note.isPinned = isPinned;
+
+        await note.save();
+
+        return res.json({
+            error: false,
+            note,
+            message: "Note updated successfully",
+        });
+
+    } catch (error) {
+        console.error(error); // Log for debugging
+        return res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
 
