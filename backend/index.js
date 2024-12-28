@@ -113,6 +113,23 @@ app.post("/login", async (req, res) => {
     }
 })
 
+//Get user
+app.get("/get-user", authenticateToken, async (req, res) => {
+    const { user } = req.user;
+
+    const isUser = await User.findOne({ _id: user._id });
+
+    if (!isUser) {
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    return res.json({
+        user: isUser,
+        message: ""
+    })
+
+})
+
 //Add Note
 app.post("/add-note", authenticateToken, async (req, res) => {
     const { title, content, tags } = req.body;
@@ -189,10 +206,10 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
 
 //Get All Notes
 app.get("/get-all-notes", authenticateToken, async (req, res) => {
-    const{ user } = req.user;
+    const { user } = req.user;
 
     try {
-        const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1});
+        const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1 });
 
         return res.json({ error: false, notes, message: "Notes fetched successfully" });
 
@@ -209,8 +226,8 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
     try {
         const note = await Note.findOneAndDelete({ _id: noteId, userId: user._id });
 
-        if(!note){
-            return res.status(404).json({ error: true, message: "Note not found"})
+        if (!note) {
+            return res.status(404).json({ error: true, message: "Note not found" })
         }
 
         return res.json({ error: false, message: "Note deleted successfully" });
