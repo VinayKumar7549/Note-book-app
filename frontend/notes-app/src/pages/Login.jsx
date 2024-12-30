@@ -29,8 +29,12 @@ const Login = () => {
 
     try {
       // Login API Call
-      const response = await axiosInstance.post('/login', { email, password });
+      const response = await axiosInstance.post('/login', {
+        email: email,
+        password: password
+      });
 
+      //Handle successful login
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken);
         navigate('/dashboard');
