@@ -6,7 +6,6 @@ import AddEditNotes from './AddEditNotes'
 import Modal from "react-modal"
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/axiosInstance';
-import moment from 'moment';
 
 const Home = () => {
 
@@ -70,7 +69,7 @@ const Home = () => {
             <NoteCard
               key={item._id}
               title={item.title}
-              date={moment(item.createOn).format('Do MMM YYYY')}
+              date={item.createOn}
               content={item.content}
               tags={item.tags}
               isPinned={item.isPinned}
