@@ -38,7 +38,7 @@ const Home = () => {
   };
 
   //Get all Notes
-  const getNotes = async () => {
+  const getAllNotes = async () => {
     try {
       const response = await axiosInstance.get("/get-all-notes");
 
@@ -51,7 +51,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getNotes();
+    getAllNotes();
     getUserInfo();
     return () => { };
 
@@ -95,22 +95,25 @@ const Home = () => {
 
     <Modal
       isOpen={openAddEditModal.isShow}
-      onRequestClose={() => { }}
+      onRequestClose={() => {}}
       style={{
         overlay: {
           backgroundColor: "rgba(0,0,0,0.2)",
         },
       }}
       contentLabel=""
-      className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll  "
+      className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
     >
       <AddEditNotes
         type={openAddEditModal.type}
         noteDate={openAddEditModal.data}
         onClose={() => {
           setOpenAddEditModal({ isShow: false, type: "add", data: null });
-        }} />
+        }}
+        getAllNotes={getAllNotes}
+      />
     </Modal>
+
 
 
   </>
