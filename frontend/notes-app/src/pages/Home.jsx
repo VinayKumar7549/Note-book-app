@@ -19,8 +19,11 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
-  //Get User Info
+  const handleEdit = (noteDetails) => {
+    setOpenAddEditModal({ isShow: true, data: noteDetails, type: "edit"});
+  };
 
+  //Get User Info
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -73,7 +76,7 @@ const Home = () => {
               content={item.content}
               tags={item.tags}
               isPinned={item.isPinned}
-              onEdit={() => { }}
+              onEdit={() => handleEdit(item)}
               onDelete={() => { }}
               onPinNote={() => { }}
             />
@@ -102,7 +105,7 @@ const Home = () => {
         },
       }}
       contentLabel=""
-      className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
+      className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 "
     >
       <AddEditNotes
         type={openAddEditModal.type}
