@@ -24,7 +24,10 @@ const Home = () => {
 
   const [allNotes, setAllNotes] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
+
   const navigate = useNavigate();
+
 
   const handleEdit = (noteDetails) => {
     setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
@@ -78,9 +81,9 @@ const Home = () => {
   //Delete Note
   const deleteNote = async (data) => {
     const noteId = data._id
-  
+
     try {
-      const response = await axiosInstance.delete('/delete-note/'+ noteId);
+      const response = await axiosInstance.delete('/delete-note/' + noteId);
 
       if (response.data && !response.data.error) {
         showToastMessage("Note Deleted Successfully", 'delete');
@@ -94,6 +97,25 @@ const Home = () => {
     }
   }
 
+  //Search Note
+  const onSearchNote = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-notes/", { params: { query }, });
+
+      if (response.data && response.data.notes) {
+        setIsSearch(true);
+        setAllNotes(response.data.notes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllNotes();
+  };
+
   useEffect(() => {
     getAllNotes();
     getUserInfo();
@@ -104,7 +126,11 @@ const Home = () => {
 
   return <>
 
-    <Navbar userInfo={userInfo} />
+    <Navbar
+      userInfo={userInfo}
+      onSearchNote={onSearchNote}
+      handleClearSearch={handleClearSearch}
+    />
 
     <div className='container mx-auto'>
       <div className='grid grid-cols-3 gap-4 mt-8'>
