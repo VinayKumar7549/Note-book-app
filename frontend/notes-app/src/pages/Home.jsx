@@ -6,13 +6,20 @@ import AddEditNotes from './AddEditNotes'
 import Modal from "react-modal"
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/axiosInstance';
+import { Toast } from '../components/ToastMessages/Toast'
 
 const Home = () => {
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
-    isShow: false,
+    isShown: false,
     type: "add",
     date: null,
+  });
+
+  const [showToastMsg, setShowToastMsg] = useState({
+    isShown: false,
+    message: "",
+    type: "add",
   });
 
   const [allNotes, setAllNotes] = useState([]);
@@ -20,8 +27,23 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
-    setOpenAddEditModal({ isShow: true, data: noteDetails, type: "edit"});
+    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
   };
+
+  const showToastMessage = (message, type) => {
+    setShowToastMsg({
+      isShown: true,
+      message,
+      type,
+    })
+  }
+
+  const handleCloseToast = () => {
+    setShowToastMsg({
+      isShown: false,
+      message: "",
+    })
+  }
 
   //Get User Info
   const getUserInfo = async () => {
@@ -90,15 +112,15 @@ const Home = () => {
 
     <button className='w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10'
       onClick={() => {
-        setOpenAddEditModal({ isShow: true, type: "add", data: null });
+        setOpenAddEditModal({ isShown: true, type: "add", data: null });
       }}>
       <MdAdd className='text-[32px] text-white' />
     </button>
 
 
     <Modal
-      isOpen={openAddEditModal.isShow}
-      onRequestClose={() => {}}
+      isOpen={openAddEditModal.isShown}
+      onRequestClose={() => { }}
       style={{
         overlay: {
           backgroundColor: "rgba(0,0,0,0.2)",
@@ -111,11 +133,19 @@ const Home = () => {
         type={openAddEditModal.type}
         noteDate={openAddEditModal.data}
         onClose={() => {
-          setOpenAddEditModal({ isShow: false, type: "add", data: null });
+          setOpenAddEditModal({ isShown: false, type: "add", data: null });
         }}
         getAllNotes={getAllNotes}
+        showToastMessage={showToastMessage}
       />
     </Modal>
+
+    <Toast
+      isShown={showToastMsg.isShown}
+      message={showToastMsg.message}
+      type={showToastMsg.type}
+      onClose={handleCloseToast}
+    />
 
 
 

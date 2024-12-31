@@ -3,7 +3,7 @@ import TagInput from '../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
 import axiosInstance from '../utils/axiosInstance';
 
-const AddEditNotes = ({ noteDate, getAllNotes, type, onClose }) => {
+const AddEditNotes = ({ noteDate, getAllNotes, type, onClose, showToastMessage }) => {
 
   const [title, seTitle] = useState(noteDate?.title || "");
   const [content, setContent] = useState(noteDate?.content || "");
@@ -20,6 +20,7 @@ const AddEditNotes = ({ noteDate, getAllNotes, type, onClose }) => {
         tags,
       });
       if (response.data && response.data.note) {
+        showToastMessage("Note Added Successfully");
         getAllNotes();
         onClose();
       }
@@ -42,6 +43,7 @@ const AddEditNotes = ({ noteDate, getAllNotes, type, onClose }) => {
         tags,
       });
       if (response.data && response.data.note) {
+        showToastMessage("Note Updated Successfully");
         getAllNotes();
         onClose();
       }
@@ -87,7 +89,7 @@ const AddEditNotes = ({ noteDate, getAllNotes, type, onClose }) => {
         <input
           type="text"
           className='text-2xl text-slate-950 outline-none'
-          placeholder='Go to Gym at 5'
+          placeholder='Title'
           value={title}
           onChange={({ target }) => seTitle(target.value)}
         />
