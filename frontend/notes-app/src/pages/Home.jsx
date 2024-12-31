@@ -111,6 +111,11 @@ const Home = () => {
     }
   }
 
+  //IsPinned
+  const updateIsPinned = async (noteDate) => {
+    
+  }
+
   const handleClearSearch = () => {
     setIsSearch(false);
     getAllNotes();
